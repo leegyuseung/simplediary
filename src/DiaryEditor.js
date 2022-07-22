@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 
 const DiaryEditor = () => {
+  // useRef는 focus를 위해서 사용한다.
   const authorInput = useRef();
   const contentInput = useRef();
 
@@ -36,6 +37,7 @@ const DiaryEditor = () => {
       <h2>오늘의 일기</h2>
       <div>
         <input
+          // input focus를 위해 ref={}에 useRef() 넣어주는 방식.
           ref={authorInput}
           name="author"
           value={state.author}
