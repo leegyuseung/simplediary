@@ -28,10 +28,12 @@ import { useState, useRef } from "react";
 // ];
 
 function App() {
+  // 데이터를 리스트로 저장
   const [data, setData] = useState([]);
 
   const dataId = useRef(0);
 
+  // 글 생성
   const onCreate = (author, content, emotion) => {
     const created_date = new Date().getTime();
     const newItem = {
@@ -45,15 +47,25 @@ function App() {
     setData([newItem, ...data]);
   };
 
-  const onDelete = (targetId) => {
+  // 글 삭제 (list를 filter해주는 방식.)
+  const onRemove = (targetId) => {
     const newDiaryList = data.filter((it) => it.id !== targetId);
     setData(newDiaryList);
+  };
+
+  // 글 수정하는 기능을 가지는 함수
+  const onEdit = (targetId, newContent) => {
+    setData(
+      data.map((it) =>
+        it.id === targetId ? { ...it, content: newContent } : it
+      )
+    );
   };
 
   return (
     <div className="App">
       <DiaryEditor onCreate={onCreate} />
-      <DiaryList onDelete={onDelete} diaryList={data} />
+      <DiaryList onEdit={onEdit} onRemove={onRemove} diaryList={data} />
     </div>
   );
 }
