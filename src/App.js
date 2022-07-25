@@ -63,8 +63,6 @@ function App() {
 
   //감정점수에 따른 일기 분석
   const getDiaryAnalysis = useMemo(() => {
-    console.log("일기 분석 시작");
-
     const goodCount = data.filter((it) => it.emotion >= 3).length; // 기분좋은
     const badCount = data.length - goodCount; // 기분나쁜
     const goodRatio = (goodCount / data.length) * 100; // 기분좋은 비율
