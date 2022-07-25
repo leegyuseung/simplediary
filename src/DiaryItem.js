@@ -1,15 +1,20 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 // props에는 list에 있는 요소들
 const DiaryItem = ({
-  onEdit,
-  onRemove,
+  onEdit, // 함수
+  onRemove, // 함수
+  //데이터들
   author,
   content,
   created_date,
   emotion,
   id,
 }) => {
+  useEffect(() => {
+    console.log(`${id}번 째 아이템 랜더!`);
+  });
+
   //  수정하기(true가 되면 수정가능한 상태로 바뀐다.)
   const [isEdit, setIsEdit] = useState(false);
 
@@ -88,4 +93,4 @@ const DiaryItem = ({
   );
 };
 
-export default DiaryItem;
+export default React.memo(DiaryItem);

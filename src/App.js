@@ -49,19 +49,18 @@ function App() {
   }, []);
 
   // 글 삭제 (list를 filter해주는 방식.)
-  const onRemove = (targetId) => {
-    const newDiaryList = data.filter((it) => it.id !== targetId);
-    setData(newDiaryList);
-  };
+  const onRemove = useCallback((targetId) => {
+    setData((data) => data.filter((it) => it.id !== targetId));
+  }, []);
 
   // 글 수정하는 기능을 가지는 함수
-  const onEdit = (targetId, newContent) => {
-    setData(
+  const onEdit = useCallback((targetId, newContent) => {
+    setData((data) =>
       data.map((it) =>
         it.id === targetId ? { ...it, content: newContent } : it
       )
     );
-  };
+  }, []);
 
   //감정점수에 따른 일기 분석
   const getDiaryAnalysis = useMemo(() => {
