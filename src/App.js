@@ -1,33 +1,7 @@
 import "./App.css";
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
-import { useState, useRef, useEffect } from "react";
-
-// const dummyList = [
-//   {
-//     id: 1,
-//     author: "홍길동",
-//     content: "하이 1",
-//     emotion: 5,
-//     created_date: new Date().getTime(),
-//   },
-//   {
-//     id: 2,
-//     author: "이순신",
-//     content: "하이 2",
-//     emotion: 2,
-//     created_date: new Date().getTime(),
-//   },
-//   {
-//     id: 3,
-//     author: "아무게",
-//     content: "하이 3",
-//     emotion: 1,
-//     created_date: new Date().getTime(),
-//   },
-// ];
-
-//https://jsonplaceholder.typicode.com/comments
+import { useState, useRef, useEffect, useMemo } from "react";
 
 function App() {
   // 데이터를 리스트로 저장
@@ -87,9 +61,25 @@ function App() {
     );
   };
 
+  //감정점수에 따른 일기 분석
+  const getDiaryAnalysis = useMemo(() => {
+    console.log("일기 분석 시작");
+
+    const goodCount = data.filter((it) => it.emotion >= 3).length; // 기분좋은
+    const badCount = data.length - goodCount; // 기분나쁜
+    const goodRatio = (goodCount / data.length) * 100; // 기분좋은 비율
+    return { goodCount, badCount, goodRatio };
+  }, [data.length]);
+
+  const { goodCount, badCount, goodRatio } = getDiaryAnalysis;
+
   return (
     <div className="App">
       <DiaryEditor onCreate={onCreate} />
+      <div>전체 일기 : {data.length}</div>
+      <div>기분 좋은 일기 갯수 : {goodCount}</div>
+      <div>기분 나쁜 일기 갯수 : {badCount}</div>
+      <div>기분 좋은 일기 비율 : {goodRatio}</div>
       <DiaryList onEdit={onEdit} onRemove={onRemove} diaryList={data} />
     </div>
   );
