@@ -1,7 +1,7 @@
 import "./App.css";
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 
 function App() {
   // 데이터를 리스트로 저장
@@ -33,7 +33,7 @@ function App() {
   }, []);
 
   // 글 생성
-  const onCreate = (author, content, emotion) => {
+  const onCreate = useCallback((author, content, emotion) => {
     const created_date = new Date().getTime();
     const newItem = {
       author,
@@ -43,8 +43,10 @@ function App() {
       id: dataId.current,
     };
     dataId.current += 1;
-    setData([newItem, ...data]);
-  };
+
+    //함수형 업데이트
+    setData((data) => [newItem, ...data]);
+  }, []);
 
   // 글 삭제 (list를 filter해주는 방식.)
   const onRemove = (targetId) => {
