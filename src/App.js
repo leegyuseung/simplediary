@@ -1,7 +1,13 @@
 import "./App.css";
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
-import { useRef, useEffect, useMemo, useCallback, useReducer } from "react";
+import React, {
+  useRef,
+  useEffect,
+  useMemo,
+  useCallback,
+  useReducer,
+} from "react";
 
 //reducer 함수에는 상태와 액션을 인자로 받는다.
 const reducer = (state, action) => {
@@ -29,6 +35,10 @@ const reducer = (state, action) => {
       return state;
   }
 };
+
+// 일기 data state를 전역적으로 하기위한 context 생성
+export const DiaryStateContext = React.createContext();
+export const DiaryDispatchContext = React.createContext();
 
 const App = () => {
   // 데이터를 리스트로 저장
@@ -99,6 +109,11 @@ const App = () => {
     // );
   }, []);
 
+  // create, remove와 edit 묶기
+  const memoizedDispatches = useMemo(() => {
+    return { onCreate, onRemove, onEdit };
+  }, []);
+
   //감정점수에 따른 일기 분석
   const getDiaryAnalysis = useMemo(() => {
     const goodCount = data.filter((it) => it.emotion >= 3).length; // 기분좋은
@@ -110,15 +125,20 @@ const App = () => {
   const { goodCount, badCount, goodRatio } = getDiaryAnalysis;
 
   return (
-    <div className="App">
-      <DiaryEditor onCreate={onCreate} />
-      <div>전체 일기 : {data.length}</div>
-      <div>기분 좋은 일기 갯수 : {goodCount}</div>
-      <div>기분 나쁜 일기 갯수 : {badCount}</div>
-      <div>기분 좋은 일기 비율 : {goodRatio}</div>
-      <DiaryList onEdit={onEdit} onRemove={onRemove} diaryList={data} />
-    </div>
+    <DiaryStateContext.Provider value={data}>
+      <DiaryDispatchContext.Provider value={memoizedDispatches}>
+        <div className="App">
+          <DiaryEditor />
+          <div>전체 일기 : {data.length}</div>
+          <div>기분 좋은 일기 갯수 : {goodCount}</div>
+          <div>기분 나쁜 일기 갯수 : {badCount}</div>
+          <div>기분 좋은 일기 비율 : {goodRatio}</div>
+          <DiaryList />
+        </div>
+      </DiaryDispatchContext.Provider>
+    </DiaryStateContext.Provider>
   );
 };
 
+// export default는 파일당 한 개만 가능하다.
 export default App;

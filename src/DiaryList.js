@@ -1,6 +1,10 @@
 import DiaryItem from "./DiaryItem";
+import { useContext } from "react";
+import { DiaryStateContext } from "./App";
 
-const DiaryList = ({ onEdit, onRemove, diaryList }) => {
+const DiaryList = () => {
+  const diaryList = useContext(DiaryStateContext);
+
   return (
     <div className="DiaryList">
       <h2>일기 리스트</h2>
@@ -8,7 +12,7 @@ const DiaryList = ({ onEdit, onRemove, diaryList }) => {
       <div>
         {diaryList.map((it) => (
           // List를 DiaryItem에 넣어준다. key=id로 지정해준 것 {...it}는 List 항목을 전부 넣어준 것.
-          <DiaryItem key={it.id} {...it} onRemove={onRemove} onEdit={onEdit} />
+          <DiaryItem key={it.id} {...it} />
         ))}
       </div>
     </div>

@@ -1,6 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useContext } from "react";
+import { DiaryDispatchContext } from "./App";
 
-const DiaryEditor = ({ onCreate }) => {
+const DiaryEditor = () => {
+  const onCreate = useContext(DiaryDispatchContext);
+
   // useRef는 focus를 위해서 사용한다.
   const authorInput = useRef();
   const contentInput = useRef();
